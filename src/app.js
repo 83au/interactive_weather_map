@@ -12,7 +12,6 @@ function initMap() {
     center: startingCenter,
     zoom: 5
   });
-
   getWeather('Los Angeles', startingCenter, map);
 
   // Initialize geocoder
