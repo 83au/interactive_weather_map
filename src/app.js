@@ -25,7 +25,7 @@ function setListeners(map, geocoder) {
   // Set click event listener to map
   map.addListener('click', e => {
     const latLng = {lat: e.latLng.lat(), lng: e.latLng.lng()};
-    map.setCenter(latLng);
+    map.panTo(latLng);
     geocoder.geocode({'location': e.latLng}, (results, status) => {
       if (status === 'OK') {
         const place = results[0].formatted_address;
@@ -93,7 +93,7 @@ function geocodeAddress(map, geocoder) {
       const location = results[0].geometry.location;
       const latLng = {lat: location.lat(), lng: location.lng()};
       // console.log('LOCATION: ' + location);
-      map.setCenter(location);
+      map.panTo(location);
       const place = results[0].formatted_address;
       getWeather(place, latLng, map);
 
