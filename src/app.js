@@ -7,7 +7,7 @@ script.async = true;
 
 function initMap() {
   // Initialize map and set starting point
-  const startingCenter = {lat: 34.0522, lng: -118.2437};
+  const startingCenter = { lat: 34.0522, lng: -118.2437 };
   const map = new google.maps.Map(document.getElementById('map'), {
     center: startingCenter,
     zoom: 5
@@ -18,29 +18,6 @@ function initMap() {
   const geocoder = new google.maps.Geocoder();
 
   setListeners(map, geocoder);
-}
-
-
-function setListeners(map, geocoder) {
-  // Set click event listener to map
-  map.addListener('click', e => {
-    const latLng = {lat: e.latLng.lat(), lng: e.latLng.lng()};
-    map.panTo(latLng);
-    geocoder.geocode({'location': e.latLng}, (results, status) => {
-      if (status === 'OK') {
-        const place = results[0].formatted_address;
-        getWeather(place, latLng, map);
-      } else {
-        console.log(status);
-      }
-    });
-  });
-
-  // Set event listener to form
-  document.querySelector('form').addEventListener('submit', e => {
-    e.preventDefault();
-    geocodeAddress(map, geocoder);
-  });
 }
 
 
@@ -82,6 +59,29 @@ function getWeather(place, coords, map) {
 }
 
 
+function setListeners(map, geocoder) {
+  // Set click event listener to map
+  map.addListener('click', e => {
+    const latLng = {lat: e.latLng.lat(), lng: e.latLng.lng()};
+    map.panTo(latLng);
+    geocoder.geocode({'location': e.latLng}, (results, status) => {
+      if (status === 'OK') {
+        const place = results[0].formatted_address;
+        getWeather(place, latLng, map);
+      } else {
+        console.log(status);
+      }
+    });
+  });
+
+  // Set event listener to form
+  document.querySelector('form').addEventListener('submit', e => {
+    e.preventDefault();
+    geocodeAddress(map, geocoder);
+  });
+}
+
+
 function geocodeAddress(map, geocoder) {
   let input = document.getElementById('address');
   let address = input.value;
@@ -90,8 +90,7 @@ function geocodeAddress(map, geocoder) {
   geocoder.geocode({'address': address}, (results, status) => {
     if (status === 'OK') {
       const location = results[0].geometry.location;
-      const latLng = {lat: location.lat(), lng: location.lng()};
-      // console.log('LOCATION: ' + location);
+      const latLng = { lat: location.lat(), lng: location.lng() };
       map.panTo(location);
       const place = results[0].formatted_address;
       getWeather(place, latLng, map);
