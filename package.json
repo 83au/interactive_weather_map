@@ -4,7 +4,7 @@
   "description": "Interactive weather map",
   "main": "app.js",
   "scripts": {
-    "build": "babel src -d lib",
+    "build": "babel src -d public",
     "lambda-serve": "netlify-lambda serve functions",
     "lambda-build": "netlify-lambda build functions"
   },
