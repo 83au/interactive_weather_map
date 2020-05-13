@@ -46,9 +46,8 @@ function setListeners(map, geocoder) {
 
 function getWeather(place, coords, map) {
   const {lat, lng } = coords;
-  const appID = '3f6d3155bc585eeb986f9af8e355a7f9';
 
-  axios(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${appID}&units=imperial`)
+  axios(`/.netlify/functions/getWeather?lat=${lat}&lng=${lng}`)
     .then(result => {
       console.log(result.data);
       const { data } = result;
