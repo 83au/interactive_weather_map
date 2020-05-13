@@ -4,6 +4,8 @@ script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyD7clqdFepsrp5BQp
 script.defer = true;
 script.async = true;
 
+console.log('GOT HERE');
+
 
 function initMap() {
   // Initialize map and set starting point
@@ -47,7 +49,7 @@ function setListeners(map, geocoder) {
 function getWeather(place, coords, map) {
   const {lat, lng } = coords;
 
-  axios(`/.netlify/functions/getWeather?lat=${lat}&lng=${lng}`)
+  axios(`http://localhost:9000/getWeather?lat=${lat}&lng=${lng}`)
     .then(result => {
       console.log(result.data);
       const { data } = result;

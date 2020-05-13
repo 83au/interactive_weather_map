@@ -5,7 +5,6 @@ var script = document.createElement('script');
 script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyD7clqdFepsrp5BQpJVgIj2vMyQTSUaDPQ&callback=initMap';
 script.defer = true;
 script.async = true;
-console.log('GOT HERE');
 
 function initMap() {
   // Initialize map and set starting point
@@ -52,7 +51,7 @@ function setListeners(map, geocoder) {
 function getWeather(place, coords, map) {
   var lat = coords.lat,
       lng = coords.lng;
-  axios("http://localhost:9000/getWeather?lat=".concat(lat, "&lng=").concat(lng)).then(function (result) {
+  axios("/.netlify/functions/getWeather?lat=".concat(lat, "&lng=").concat(lng)).then(function (result) {
     console.log(result.data);
     var data = result.data;
     var icon = data.weather[0].icon;
