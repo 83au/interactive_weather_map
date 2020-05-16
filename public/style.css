@@ -15,6 +15,10 @@
   UNIVERSAL
 ==================== */
 
+:root {
+  --color-clear-day: hsl(200, 100%, 60%);
+}
+
 html {
   font-size: 62.5%;
   font-family: sans-serif;
@@ -25,7 +29,9 @@ html, body {
 }
 
 body {
+  background-color: var(--color-clear-day);
   box-sizing: border-box;
+  color: #fff;
 }
 
 
@@ -107,6 +113,18 @@ button {
 /* =====================
   POPUP BUBBLE
 ====================== */
+
+@keyframes popIn {
+  0% {
+    transform: translate(-50%, -100%) scale(0);
+  }
+  80% {
+    transform: translate(-50%, -100%) scale(1.1);
+  }
+  100% {
+    transform: translate(-50%, -100%) scale(1);
+  }
+}
 /* The popup bubble styling. */
       .popup-bubble {
         /* Position the bubble centred-above its parent. */
@@ -115,13 +133,18 @@ button {
         left: 0;
         transform: translate(-50%, -100%);
         /* Style the bubble. */
-        background-color: white;
-        padding: 5px;
+        background-color: var(--color-clear-day);
+        color: #fff;
+        padding: 1rem;
         border-radius: 5px;
         font-family: sans-serif;
         overflow-y: auto;
-        max-height: 60px;
+        /* max-height: 60px; */
         box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.5);
+        transform: translate(-50%, -100%) scale(0);
+      }
+      .popup-bubble.show {
+        animation: popIn .3s forwards;
       }
       /* The parent of the bubble. A zero-height div at the top of the tip. */
       .popup-bubble-anchor {
@@ -153,5 +176,5 @@ button {
         height: 0;
         position: absolute;
         /* The max width of the info window. */
-        width: 200px;
+        min-width: 600px;
       }

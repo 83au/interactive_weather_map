@@ -25,18 +25,77 @@ function initMap() {
 function getWeather(place, coords, map) {
   var lat = coords.lat,
       lng = coords.lng;
-  axios("/.netlify/functions/getWeather?lat=".concat(lat, "&lng=").concat(lng)).then(function (result) {
+  axios("http://localhost:9000/getWeather?lat=".concat(lat, "&lng=").concat(lng)).then(function (result) {
     console.log(result.data);
     var data = result.data;
     var icon = data.weather[0].icon;
-    var content = "\n        <div class=\"weather\">\n          <h2 class=\"weather-header\">".concat(place, "</h2>\n          <div class=\"weather-content\">\n            <div class=\"weather-content__main\">\n              <div class=\"temp\">").concat(Math.floor(data.main.temp), "\xB0</div>\n              <div class=\"icon-container\">\n                <img src=\"https://openweathermap.org/img/wn/").concat(icon, "@2x.png\" alt=\"weather icon\">\n              </div>\n            </div>\n          <div class=\"weather-description\">").concat(data.weather[0].description, "</div>\n            <div class=\"winds\">\n              Wind Speed: ").concat(Math.floor(data.wind.speed), " m/s\n            </div>\n            <div class=\"winds\">\n              Humidity: ").concat(data.main.humidity, "%\n            </div>\n          </div>\n        </div>\n      "); // Show first info window at staring point
-
-    var infoWindow = new google.maps.InfoWindow({
-      content: content,
-      position: coords
-    });
-    infoWindow.open(map);
+    var content = "\n        <div class=\"weather\">\n          <h2 class=\"weather-header\">".concat(place, "</h2>\n          <div class=\"weather-content\">\n            <div class=\"weather-content__main\">\n              <div class=\"temp\">").concat(Math.floor(data.main.temp), "\xB0</div>\n              <div class=\"icon-container\">\n                <img src=\"https://openweathermap.org/img/wn/").concat(icon, "@2x.png\" alt=\"weather icon\">\n              </div>\n            </div>\n          <div class=\"weather-description\">").concat(data.weather[0].description, "</div>\n            <div class=\"winds\">\n              Wind Speed: ").concat(Math.floor(data.wind.speed), " m/s\n            </div>\n            <div class=\"winds\">\n              Humidity: ").concat(data.main.humidity, "%\n            </div>\n          </div>\n        </div>\n      ");
+    var contentEl = document.getElementById('content');
+    contentEl.innerHTML = content;
+    var Popup = createPopupClass();
+    var popup = new Popup(new google.maps.LatLng(lat, lng), contentEl);
+    popup.setMap(map);
+    setTimeout(function () {
+      return contentEl.classList.add('show');
+    }, 200); // Show first info window at staring point
+    // const infoWindow = new google.maps.InfoWindow({
+    //   content: content,
+    //   position: coords
+    // });
+    // infoWindow.open(map);
   });
+}
+
+function createPopupClass() {
+  function Popup(position, content) {
+    this.position = position;
+    content.classList.add('popup-bubble'); // This zero-height div is positioned at the bottom of the bubble.
+
+    var bubbleAnchor = document.createElement('div');
+    bubbleAnchor.classList.add('popup-bubble-anchor');
+    bubbleAnchor.appendChild(content); // This zero-height div is positioned at the bottom of the tip.
+
+    this.containerDiv = document.createElement('div');
+    this.containerDiv.classList.add('popup-container');
+    this.containerDiv.appendChild(bubbleAnchor); // Optionally stop clicks, etc., from bubbling up to the map.
+
+    google.maps.OverlayView.preventMapHitsAndGesturesFrom(this.containerDiv);
+  } // ES5 magic to extend google.maps.OverlayView.
+
+
+  Popup.prototype = Object.create(google.maps.OverlayView.prototype);
+  /** Called when the popup is added to the map. */
+
+  Popup.prototype.onAdd = function () {
+    this.getPanes().floatPane.appendChild(this.containerDiv);
+  };
+  /** Called when the popup is removed from the map. */
+
+
+  Popup.prototype.onRemove = function () {
+    if (this.containerDiv.parentElement) {
+      this.containerDiv.parentElement.removeChild(this.containerDiv);
+    }
+  };
+  /** Called each frame when the popup needs to draw itself. */
+
+
+  Popup.prototype.draw = function () {
+    var divPosition = this.getProjection().fromLatLngToDivPixel(this.position); // Hide the popup when it is far out of view.
+
+    var display = Math.abs(divPosition.x) < 4000 && Math.abs(divPosition.y) < 4000 ? 'block' : 'none';
+
+    if (display === 'block') {
+      this.containerDiv.style.left = divPosition.x + 'px';
+      this.containerDiv.style.top = divPosition.y + 'px';
+    }
+
+    if (this.containerDiv.style.display !== display) {
+      this.containerDiv.style.display = display;
+    }
+  };
+
+  return Popup;
 }
 
 function setListeners(map, geocoder) {
