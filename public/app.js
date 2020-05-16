@@ -46,6 +46,54 @@ function getWeather(place, coords, map) {
   });
 }
 
+function setListeners(map, geocoder) {
+  // Set click event listener to map
+  map.addListener('click', function (e) {
+    var latLng = {
+      lat: e.latLng.lat(),
+      lng: e.latLng.lng()
+    };
+    map.panTo(latLng);
+    geocoder.geocode({
+      'location': e.latLng
+    }, function (results, status) {
+      if (status === 'OK') {
+        var place = results[0].formatted_address;
+        getWeather(place, latLng, map);
+      } else {
+        console.log(status);
+      }
+    });
+  }); // Set event listener to form
+
+  document.querySelector('form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    geocodeAddress(map, geocoder);
+  });
+}
+
+function geocodeAddress(map, geocoder) {
+  var input = document.getElementById('address');
+  var address = input.value;
+  input.value = '';
+  geocoder.geocode({
+    'address': address
+  }, function (results, status) {
+    if (status === 'OK') {
+      var location = results[0].geometry.location;
+      var latLng = {
+        lat: location.lat(),
+        lng: location.lng()
+      };
+      map.panTo(location);
+      var place = results[0].formatted_address;
+      getWeather(place, latLng, map);
+    } else {
+      console.log('Geocoding was unsuccessful due to the following: ' + status);
+    }
+  });
+}
+
 function createPopupClass() {
   function Popup(position, content) {
     this.position = position;
@@ -96,54 +144,6 @@ function createPopupClass() {
   };
 
   return Popup;
-}
-
-function setListeners(map, geocoder) {
-  // Set click event listener to map
-  map.addListener('click', function (e) {
-    var latLng = {
-      lat: e.latLng.lat(),
-      lng: e.latLng.lng()
-    };
-    map.panTo(latLng);
-    geocoder.geocode({
-      'location': e.latLng
-    }, function (results, status) {
-      if (status === 'OK') {
-        var place = results[0].formatted_address;
-        getWeather(place, latLng, map);
-      } else {
-        console.log(status);
-      }
-    });
-  }); // Set event listener to form
-
-  document.querySelector('form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    geocodeAddress(map, geocoder);
-  });
-}
-
-function geocodeAddress(map, geocoder) {
-  var input = document.getElementById('address');
-  var address = input.value;
-  input.value = '';
-  geocoder.geocode({
-    'address': address
-  }, function (results, status) {
-    if (status === 'OK') {
-      var location = results[0].geometry.location;
-      var latLng = {
-        lat: location.lat(),
-        lng: location.lng()
-      };
-      map.panTo(location);
-      var place = results[0].formatted_address;
-      getWeather(place, latLng, map);
-    } else {
-      console.log('Geocoding was unsuccessful due to the following: ' + status);
-    }
-  });
 } // Append the 'script' element to 'head'
 
 
