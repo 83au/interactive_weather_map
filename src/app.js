@@ -36,7 +36,7 @@ function getWeather(place, coords, map) {
             <div class="weather-content__main">
               <div class="temp">${Math.floor(data.main.temp)}°</div>
               <div class="icon-container">
-                <img src="http://openweathermap.org/img/wn/${icon}@2x.png" alt="weather icon">
+                <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="weather icon">
               </div>
             </div>
           <div class="weather-description">${data.weather[0].description}</div>
