@@ -39,13 +39,14 @@ function getWeather(place, coords, map) {
                 <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="weather icon">
               </div>
             </div>
-          <div class="weather-description">${data.weather[0].description}</div>
+            <div class="weather-description">${data.weather[0].description}</div>
             <div class="winds">
               Wind Speed: ${Math.floor(data.wind.speed)} m/s
             </div>
-            <div class="winds">
+            <div class="humidity">
               Humidity: ${data.main.humidity}%
             </div>
+          </div>
           </div>
         </div>
       `;

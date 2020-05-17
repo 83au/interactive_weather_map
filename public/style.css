@@ -8,6 +8,7 @@
   margin: 0;
   padding: 0;
   box-sizing: inherit;
+  font-size: inherit;
 }
 
 
@@ -16,12 +17,14 @@
 ==================== */
 
 :root {
-  --color-clear-day: hsl(200, 100%, 60%);
+  --color-clear-day: hsl(220, 90%, 60%);
+  --color-info-day: rgba(0, 0, 0, .8);
+  --color-info-night: #eee;
 }
 
 html {
   font-size: 62.5%;
-  font-family: sans-serif;
+  font-family: 'Balsamiq Sans', sans-serif;
 }
 
 html, body {
@@ -29,9 +32,13 @@ html, body {
 }
 
 body {
-  background-color: var(--color-clear-day);
+  background-image: url('images/clear-sky-day.png');
+  background-repeat: no-repeat;
+  background-size: cover;
   box-sizing: border-box;
   color: #fff;
+
+  font-size: 1.6rem;
 }
 
 
@@ -64,13 +71,22 @@ form {
   text-align: center;
 }
 
-button {
-  background-color: hsl(220, 100%, 60%);
+#address {
+  margin: 1rem;
   border: none;
   border-radius: 4px;
+  line-height: 2;
+  padding: 0 1rem;
+}
+
+#submit {
+  background: none;
+  border: 2px solid white;
+  border-radius: 4px;
   color: white;
-  height: 2rem;
-  width: 8rem;
+  cursor: pointer;
+  height: 3rem;
+  width: 11rem;
 }
 
 
@@ -101,9 +117,17 @@ button {
   font-size: 2.5rem;
 }
 
+.weather-description {
+  margin: 1rem;
+}
+
 .weather-content__main * {
   display: inline-block;
 }
+
+/* .winds, .humidity {
+  border: 1px solid black;
+} */
 
 .temp {
   vertical-align: 140%;
@@ -126,55 +150,55 @@ button {
   }
 }
 /* The popup bubble styling. */
-      .popup-bubble {
-        /* Position the bubble centred-above its parent. */
-        position: absolute;
-        top: 0;
-        left: 0;
-        transform: translate(-50%, -100%);
-        /* Style the bubble. */
-        background-color: var(--color-clear-day);
-        color: #fff;
-        padding: 1rem;
-        border-radius: 5px;
-        font-family: sans-serif;
-        overflow-y: auto;
-        /* max-height: 60px; */
-        box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.5);
-        transform: translate(-50%, -100%) scale(0);
-      }
-      .popup-bubble.show {
-        animation: popIn .3s forwards;
-      }
-      /* The parent of the bubble. A zero-height div at the top of the tip. */
-      .popup-bubble-anchor {
-        /* Position the div a fixed distance above the tip. */
-        position: absolute;
-        width: 100%;
-        bottom: /* TIP_HEIGHT= */ 8px;
-        left: 0;
-      }
-      /* This element draws the tip. */
-      .popup-bubble-anchor::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        /* Center the tip horizontally. */
-        transform: translate(-50%, 0);
-        /* The tip is a https://css-tricks.com/snippets/css/css-triangle/ */
-        width: 0;
-        height: 0;
-        /* The tip is 8px high, and 12px wide. */
-        border-left: 6px solid transparent;
-        border-right: 6px solid transparent;
-        border-top: /* TIP_HEIGHT= */ 8px solid white;
-      }
-      /* JavaScript will position this div at the bottom of the popup tip. */
-      .popup-container {
-        cursor: auto;
-        height: 0;
-        position: absolute;
-        /* The max width of the info window. */
-        min-width: 600px;
-      }
+.popup-bubble {
+  /* Position the bubble centred-above its parent. */
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -100%);
+  /* Style the bubble. */
+  background-color: #ddd;
+  color: #000;
+  padding: 1rem;
+  border-radius: 5px;
+  font-family: sans-serif;
+  overflow-y: auto;
+  /* max-height: 60px; */
+  box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.5);
+  transform: translate(-50%, -100%) scale(0);
+}
+.popup-bubble.show {
+  animation: popIn .3s forwards;
+}
+/* The parent of the bubble. A zero-height div at the top of the tip. */
+.popup-bubble-anchor {
+  /* Position the div a fixed distance above the tip. */
+  position: absolute;
+  width: 100%;
+  bottom: /* TIP_HEIGHT= */ 8px;
+  left: 0;
+}
+/* This element draws the tip. */
+.popup-bubble-anchor::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* Center the tip horizontally. */
+  transform: translate(-50%, 0);
+  /* The tip is a https://css-tricks.com/snippets/css/css-triangle/ */
+  width: 0;
+  height: 0;
+  /* The tip is 8px high, and 12px wide. */
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: /* TIP_HEIGHT= */ 8px solid white;
+}
+/* JavaScript will position this div at the bottom of the popup tip. */
+.popup-container {
+  cursor: auto;
+  height: 0;
+  position: absolute;
+  /* The max width of the info window. */
+  min-width: 600px;
+}
