@@ -34,7 +34,7 @@ html, body {
 body {
   background-image: url('images/clear-sky-day.png');
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: auto 150%;
   box-sizing: border-box;
   color: #fff;
 
@@ -47,7 +47,7 @@ body {
 ==================== */
 
 header {
-  padding: 2rem;
+  padding: 1rem;
 }
 h1, p {
   text-align: center;
@@ -96,15 +96,17 @@ form {
 
 #map {
   margin: 1rem auto;
-  height: 50rem;
+  height: 70rem;
   width: 90%;
   background: lightgray;
+  border-radius: 6px;
 }
 
-/* .weather {
-  background-color: #222;
-  color: #eee;
-} */
+.weather {
+  font-family: 'Balsamiq Sans', sans-serif;
+  /* background-color: #222;
+  color: #eee; */
+}
 
 .weather-header {
   font-size: 3.5rem;
@@ -117,20 +119,20 @@ form {
   font-size: 2.5rem;
 }
 
+.weather-content__main {
+  font-size: 4rem;
+}
+
+.temp {
+  vertical-align: 90%;
+}
+
 .weather-description {
   margin: 1rem;
 }
 
 .weather-content__main * {
   display: inline-block;
-}
-
-/* .winds, .humidity {
-  border: 1px solid black;
-} */
-
-.temp {
-  vertical-align: 140%;
 }
 
 
@@ -157,8 +159,8 @@ form {
   left: 0;
   transform: translate(-50%, -100%);
   /* Style the bubble. */
-  background-color: #ddd;
-  color: #000;
+  background-color: rgba(25, 50, 100, .9);
+  color: #eee;
   padding: 1rem;
   border-radius: 5px;
   font-family: sans-serif;
@@ -169,6 +171,10 @@ form {
 }
 .popup-bubble.show {
   animation: popIn .3s forwards;
+}
+.popup-bubble.night {
+  background-color: #ddd;
+  color: #000;
 }
 /* The parent of the bubble. A zero-height div at the top of the tip. */
 .popup-bubble-anchor {

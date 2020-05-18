@@ -29,21 +29,142 @@ function getWeather(place, coords, map) {
     console.log(result.data);
     var data = result.data;
     var icon = data.weather[0].icon;
-    var content = "\n        <div class=\"weather\">\n          <h2 class=\"weather-header\">".concat(place, "</h2>\n          <div class=\"weather-content\">\n            <div class=\"weather-content__main\">\n              <div class=\"temp\">").concat(Math.floor(data.main.temp), "\xB0</div>\n              <div class=\"icon-container\">\n                <img src=\"https://openweathermap.org/img/wn/").concat(icon, "@2x.png\" alt=\"weather icon\">\n              </div>\n            </div>\n          <div class=\"weather-description\">").concat(data.weather[0].description, "</div>\n            <div class=\"winds\">\n              Wind Speed: ").concat(Math.floor(data.wind.speed), " m/s\n            </div>\n            <div class=\"winds\">\n              Humidity: ").concat(data.main.humidity, "%\n            </div>\n          </div>\n        </div>\n      ");
+    var isNight = icon.match(/n$/);
+    setMapStyles(map, isNight);
+    var content = "\n        <div class=\"weather\">\n          <h2 class=\"weather-header\">".concat(place, "</h2>\n          <div class=\"weather-content\">\n            <div class=\"weather-content__main\">\n              <div class=\"temp\">").concat(Math.floor(data.main.temp), "\xB0</div>\n              <div class=\"icon-container\">\n                <img src=\"https://openweathermap.org/img/wn/").concat(icon, "@2x.png\" alt=\"weather icon\">\n              </div>\n            </div>\n            <div class=\"weather-description\">").concat(data.weather[0].description, "</div>\n            <div class=\"weather-info\">\n              <div class=\"winds\">\n                Wind Speed: ").concat(Math.floor(data.wind.speed), " m/s\n              </div>\n              <div class=\"humidity\">\n                Humidity: ").concat(data.main.humidity, "%\n              </div>\n            </div>\n          </div>\n          </div>\n        </div>\n      ");
     var contentEl = document.getElementById('content');
     contentEl.innerHTML = content;
     var Popup = createPopupClass();
     var popup = new Popup(new google.maps.LatLng(lat, lng), contentEl);
-    popup.setMap(map);
+    popup.setMap(map); // Make Popup popin and check for nightmode
+
     setTimeout(function () {
-      return contentEl.classList.add('show');
-    }, 200); // Show first info window at staring point
-    // const infoWindow = new google.maps.InfoWindow({
-    //   content: content,
-    //   position: coords
-    // });
-    // infoWindow.open(map);
+      contentEl.classList.add('show');
+
+      if (isNight) {
+        contentEl.classList.add('night');
+      } else {
+        contentEl.classList.remove('night');
+      }
+    }, 200);
   });
+}
+
+function setMapStyles(map, night) {
+  if (night) {
+    map.setOptions({
+      styles: [{
+        elementType: 'geometry',
+        stylers: [{
+          color: '#242f3e'
+        }]
+      }, {
+        elementType: 'labels.text.stroke',
+        stylers: [{
+          color: '#242f3e'
+        }]
+      }, {
+        elementType: 'labels.text.fill',
+        stylers: [{
+          color: '#746855'
+        }]
+      }, {
+        featureType: 'administrative.locality',
+        elementType: 'labels.text.fill',
+        stylers: [{
+          color: '#d59563'
+        }]
+      }, {
+        featureType: 'poi',
+        elementType: 'labels.text.fill',
+        stylers: [{
+          color: '#d59563'
+        }]
+      }, {
+        featureType: 'poi.park',
+        elementType: 'geometry',
+        stylers: [{
+          color: '#263c3f'
+        }]
+      }, {
+        featureType: 'poi.park',
+        elementType: 'labels.text.fill',
+        stylers: [{
+          color: '#6b9a76'
+        }]
+      }, {
+        featureType: 'road',
+        elementType: 'geometry',
+        stylers: [{
+          color: '#38414e'
+        }]
+      }, {
+        featureType: 'road',
+        elementType: 'geometry.stroke',
+        stylers: [{
+          color: '#212a37'
+        }]
+      }, {
+        featureType: 'road',
+        elementType: 'labels.text.fill',
+        stylers: [{
+          color: '#9ca5b3'
+        }]
+      }, {
+        featureType: 'road.highway',
+        elementType: 'geometry',
+        stylers: [{
+          color: '#746855'
+        }]
+      }, {
+        featureType: 'road.highway',
+        elementType: 'geometry.stroke',
+        stylers: [{
+          color: '#1f2835'
+        }]
+      }, {
+        featureType: 'road.highway',
+        elementType: 'labels.text.fill',
+        stylers: [{
+          color: '#f3d19c'
+        }]
+      }, {
+        featureType: 'transit',
+        elementType: 'geometry',
+        stylers: [{
+          color: '#2f3948'
+        }]
+      }, {
+        featureType: 'transit.station',
+        elementType: 'labels.text.fill',
+        stylers: [{
+          color: '#d59563'
+        }]
+      }, {
+        featureType: 'water',
+        elementType: 'geometry',
+        stylers: [{
+          color: '#17263c'
+        }]
+      }, {
+        featureType: 'water',
+        elementType: 'labels.text.fill',
+        stylers: [{
+          color: '#515c6d'
+        }]
+      }, {
+        featureType: 'water',
+        elementType: 'labels.text.stroke',
+        stylers: [{
+          color: '#17263c'
+        }]
+      }]
+    });
+  } else {
+    map.setOptions({
+      styles: []
+    });
+  }
 }
 
 function setListeners(map, geocoder) {

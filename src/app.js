@@ -24,11 +24,15 @@ function initMap() {
 function getWeather(place, coords, map) {
   const {lat, lng } = coords;
 
-  axios(`/.netlify/functions/getWeather?lat=${lat}&lng=${lng}`)
+  axios(`http://localhost:9000/getWeather?lat=${lat}&lng=${lng}`)
     .then(result => {
       console.log(result.data);
       const { data } = result;
       const icon = data.weather[0].icon;
+      const isNight = icon.match(/n$/);
+
+      setMapStyles(map, isNight);
+
       let content = `
         <div class="weather">
           <h2 class="weather-header">${place}</h2>
@@ -40,11 +44,13 @@ function getWeather(place, coords, map) {
               </div>
             </div>
             <div class="weather-description">${data.weather[0].description}</div>
-            <div class="winds">
-              Wind Speed: ${Math.floor(data.wind.speed)} m/s
-            </div>
-            <div class="humidity">
-              Humidity: ${data.main.humidity}%
+            <div class="weather-info">
+              <div class="winds">
+                Wind Speed: ${Math.floor(data.wind.speed)} m/s
+              </div>
+              <div class="humidity">
+                Humidity: ${data.main.humidity}%
+              </div>
             </div>
           </div>
           </div>
@@ -60,15 +66,107 @@ function getWeather(place, coords, map) {
         contentEl
       );
       popup.setMap(map);
-      setTimeout(() => contentEl.classList.add('show'), 200);
 
-      // Show first info window at staring point
-      // const infoWindow = new google.maps.InfoWindow({
-      //   content: content,
-      //   position: coords
-      // });
-      // infoWindow.open(map);
+      // Make Popup popin and check for nightmode
+      setTimeout(() => {
+        contentEl.classList.add('show');
+        if (isNight) {
+        contentEl.classList.add('night');
+        } else {
+          contentEl.classList.remove('night');
+        }
+      }, 200);
     });
+}
+
+
+function setMapStyles(map, night) {
+  if (night) {
+    map.setOptions({
+      styles: [
+        {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+        {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+        {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+        {
+          featureType: 'administrative.locality',
+          elementType: 'labels.text.fill',
+          stylers: [{color: '#d59563'}]
+        },
+        {
+          featureType: 'poi',
+          elementType: 'labels.text.fill',
+          stylers: [{color: '#d59563'}]
+        },
+        {
+          featureType: 'poi.park',
+          elementType: 'geometry',
+          stylers: [{color: '#263c3f'}]
+        },
+        {
+          featureType: 'poi.park',
+          elementType: 'labels.text.fill',
+          stylers: [{color: '#6b9a76'}]
+        },
+        {
+          featureType: 'road',
+          elementType: 'geometry',
+          stylers: [{color: '#38414e'}]
+        },
+        {
+          featureType: 'road',
+          elementType: 'geometry.stroke',
+          stylers: [{color: '#212a37'}]
+        },
+        {
+          featureType: 'road',
+          elementType: 'labels.text.fill',
+          stylers: [{color: '#9ca5b3'}]
+        },
+        {
+          featureType: 'road.highway',
+          elementType: 'geometry',
+          stylers: [{color: '#746855'}]
+        },
+        {
+          featureType: 'road.highway',
+          elementType: 'geometry.stroke',
+          stylers: [{color: '#1f2835'}]
+        },
+        {
+          featureType: 'road.highway',
+          elementType: 'labels.text.fill',
+          stylers: [{color: '#f3d19c'}]
+        },
+        {
+          featureType: 'transit',
+          elementType: 'geometry',
+          stylers: [{color: '#2f3948'}]
+        },
+        {
+          featureType: 'transit.station',
+          elementType: 'labels.text.fill',
+          stylers: [{color: '#d59563'}]
+        },
+        {
+          featureType: 'water',
+          elementType: 'geometry',
+          stylers: [{color: '#17263c'}]
+        },
+        {
+          featureType: 'water',
+          elementType: 'labels.text.fill',
+          stylers: [{color: '#515c6d'}]
+        },
+        {
+          featureType: 'water',
+          elementType: 'labels.text.stroke',
+          stylers: [{color: '#17263c'}]
+        }
+      ]
+    })
+  } else {
+    map.setOptions({styles: []});
+  }
 }
 
 
