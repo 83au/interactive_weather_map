@@ -25,7 +25,7 @@ function initMap() {
 function getWeather(place, coords, map) {
   var lat = coords.lat,
       lng = coords.lng;
-  axios("http://localhost:9000/getWeather?lat=".concat(lat, "&lng=").concat(lng)).then(function (result) {
+  axios("/.netlify/functions/getWeather?lat=".concat(lat, "&lng=").concat(lng)).then(function (result) {
     // console.log(result.data);
     var data = result.data;
     var icon = data.weather[0].icon;
@@ -60,7 +60,8 @@ function setBackImg(weather, night) {
     rain: 'rain.png',
     thunderstorm: 'storm.png',
     snow: 'snow.png',
-    mist: 'mist.png'
+    mist: 'mist.png',
+    haze: 'mist.png'
   };
 
   if (night) {
@@ -74,6 +75,8 @@ function setBackImg(weather, night) {
       body.style.backgroundImage = 'url(images/storm.png';
     } else if (weather.endsWith('snow')) {
       body.style.backgroundImage = 'url(images/night-snow.png';
+    } else if (weather === 'haze' || weather === 'mist') {
+      body.style.backgroundImage = "url(images/".concat(weatherImagesDay[weather], ")");
     }
   } else {
     body.style.backgroundImage = "url(images/".concat(weatherImagesDay[weather], ")");
