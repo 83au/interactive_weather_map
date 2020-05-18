@@ -26,12 +26,14 @@ function getWeather(place, coords, map) {
   var lat = coords.lat,
       lng = coords.lng;
   axios("http://localhost:9000/getWeather?lat=".concat(lat, "&lng=").concat(lng)).then(function (result) {
-    console.log(result.data);
+    // console.log(result.data);
     var data = result.data;
     var icon = data.weather[0].icon;
     var isNight = icon.match(/n$/);
+    var weatherDescription = data.weather[0].description;
+    setBackImg(weatherDescription, isNight);
     setMapStyles(map, isNight);
-    var content = "\n        <div class=\"weather\">\n          <h2 class=\"weather-header\">".concat(place, "</h2>\n          <div class=\"weather-content\">\n            <div class=\"weather-content__main\">\n              <div class=\"temp\">").concat(Math.floor(data.main.temp), "\xB0</div>\n              <div class=\"icon-container\">\n                <img src=\"https://openweathermap.org/img/wn/").concat(icon, "@2x.png\" alt=\"weather icon\">\n              </div>\n            </div>\n            <div class=\"weather-description\">").concat(data.weather[0].description, "</div>\n            <div class=\"weather-info\">\n              <div class=\"winds\">\n                Wind Speed: ").concat(Math.floor(data.wind.speed), " m/s\n              </div>\n              <div class=\"humidity\">\n                Humidity: ").concat(data.main.humidity, "%\n              </div>\n            </div>\n          </div>\n          </div>\n        </div>\n      ");
+    var content = "\n        <div class=\"weather\">\n          <h2 class=\"weather-header\">".concat(place, "</h2>\n          <div class=\"weather-content\">\n            <div class=\"weather-content__main\">\n              <div class=\"temp\">").concat(Math.floor(data.main.temp), "\xB0</div>\n              <div class=\"icon-container\">\n                <img src=\"https://openweathermap.org/img/wn/").concat(icon, "@2x.png\" alt=\"weather icon\">\n              </div>\n            </div>\n            <div class=\"weather-description\">").concat(weatherDescription, "</div>\n            <div class=\"weather-info\">\n              <div class=\"winds\">\n                Wind Speed: ").concat(Math.floor(data.wind.speed), " m/s\n              </div>\n              <div class=\"humidity\">\n                Humidity: ").concat(data.main.humidity, "%\n              </div>\n            </div>\n          </div>\n          </div>\n        </div>\n      ");
     var contentEl = document.getElementById('content');
     contentEl.innerHTML = content;
     var Popup = createPopupClass();
@@ -40,14 +42,42 @@ function getWeather(place, coords, map) {
 
     setTimeout(function () {
       contentEl.classList.add('show');
-
-      if (isNight) {
-        contentEl.classList.add('night');
-      } else {
-        contentEl.classList.remove('night');
-      }
     }, 200);
   });
+}
+
+function setBackImg(weather, night) {
+  var body = document.body;
+  console.log(weather);
+  var weatherImagesDay = {
+    "clear sky": 'clear-sky-day.png',
+    "few clouds": 'few-clouds.png',
+    "scattered clouds": 'scattered-clouds.png',
+    "broken clouds": 'broken-clouds.png',
+    "overcast clouds": 'mist.png',
+    "shower rain": 'rain.png',
+    "light rain": 'rain.png',
+    rain: 'rain.png',
+    thunderstorm: 'storm.png',
+    snow: 'snow.png',
+    mist: 'mist.png'
+  };
+
+  if (night) {
+    if (weather === 'clear sky') {
+      body.style.backgroundImage = "url(images/clear-sky-night.png)";
+    } else if (weather.endsWith('clouds')) {
+      body.style.backgroundImage = "url(images/cloudy-night.png)";
+    } else if (weather.endsWith('rain')) {
+      body.style.backgroundImage = 'url(images/rainy-night.png';
+    } else if (weather.endsWith('thunderstorm')) {
+      body.style.backgroundImage = 'url(images/storm.png';
+    } else if (weather.endsWith('snow')) {
+      body.style.backgroundImage = 'url(images/night-snow.png';
+    }
+  } else {
+    body.style.backgroundImage = "url(images/".concat(weatherImagesDay[weather], ")");
+  }
 }
 
 function setMapStyles(map, night) {
@@ -179,7 +209,11 @@ function setListeners(map, geocoder) {
       'location': e.latLng
     }, function (results, status) {
       if (status === 'OK') {
-        var place = results[0].formatted_address;
+        // console.log(results);
+        var addressArr = results[0].formatted_address.split(',');
+        var addressArrShort = addressArr.slice(addressArr.length - 3);
+        var place = addressArrShort.join(', ');
+        console.log(place);
         getWeather(place, latLng, map);
       } else {
         console.log(status);

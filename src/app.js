@@ -26,10 +26,13 @@ function getWeather(place, coords, map) {
 
   axios(`http://localhost:9000/getWeather?lat=${lat}&lng=${lng}`)
     .then(result => {
-      console.log(result.data);
+      // console.log(result.data);
       const { data } = result;
       const icon = data.weather[0].icon;
       const isNight = icon.match(/n$/);
+      const weatherDescription = data.weather[0].description;
+
+      setBackImg(weatherDescription, isNight);
 
       setMapStyles(map, isNight);
 
@@ -43,7 +46,7 @@ function getWeather(place, coords, map) {
                 <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="weather icon">
               </div>
             </div>
-            <div class="weather-description">${data.weather[0].description}</div>
+            <div class="weather-description">${weatherDescription}</div>
             <div class="weather-info">
               <div class="winds">
                 Wind Speed: ${Math.floor(data.wind.speed)} m/s
@@ -70,13 +73,46 @@ function getWeather(place, coords, map) {
       // Make Popup popin and check for nightmode
       setTimeout(() => {
         contentEl.classList.add('show');
-        if (isNight) {
-        contentEl.classList.add('night');
-        } else {
-          contentEl.classList.remove('night');
-        }
       }, 200);
     });
+}
+
+
+function setBackImg(weather, night) {
+  const body = document.body;
+  console.log(weather);
+  const weatherImagesDay = {
+    "clear sky": 'clear-sky-day.png',
+    "few clouds": 'few-clouds.png',
+    "scattered clouds": 'scattered-clouds.png',
+    "broken clouds": 'broken-clouds.png',
+    "overcast clouds": 'mist.png',
+    "shower rain": 'rain.png',
+    "light rain": 'rain.png',
+    rain: 'rain.png',
+    thunderstorm: 'storm.png',
+    snow: 'snow.png',
+    mist: 'mist.png',
+    haze: 'mist.png'
+  }
+
+  if (night) {
+    if (weather === 'clear sky') {
+      body.style.backgroundImage = `url(images/clear-sky-night.png)`;
+    } else if (weather.endsWith('clouds')) {
+      body.style.backgroundImage = `url(images/cloudy-night.png)`;
+    } else if (weather.endsWith('rain')) {
+      body.style.backgroundImage = 'url(images/rainy-night.png';
+    } else if (weather.endsWith('thunderstorm')) {
+      body.style.backgroundImage = 'url(images/storm.png';
+    } else if (weather.endsWith('snow')) {
+      body.style.backgroundImage = 'url(images/night-snow.png';
+    } else if (weather === 'haze' || weather === 'mist') {
+       body.style.backgroundImage = `url(images/${weatherImagesDay[weather]})`;
+    }
+  } else {
+    body.style.backgroundImage = `url(images/${weatherImagesDay[weather]})`;
+  }
 }
 
 
@@ -177,7 +213,11 @@ function setListeners(map, geocoder) {
     map.panTo(latLng);
     geocoder.geocode({'location': e.latLng}, (results, status) => {
       if (status === 'OK') {
-        const place = results[0].formatted_address;
+        // console.log(results);
+        const addressArr = results[0].formatted_address.split(',');
+        const addressArrShort = addressArr.slice(addressArr.length - 3);
+        const place = addressArrShort.join(', ');
+        console.log(place);
         getWeather(place, latLng, map);
       } else {
         console.log(status);

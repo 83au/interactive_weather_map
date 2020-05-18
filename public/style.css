@@ -17,7 +17,7 @@
 ==================== */
 
 :root {
-  --color-clear-day: hsl(220, 90%, 60%);
+  --color-primary: rgb(50, 50, 250);
   --color-info-day: rgba(0, 0, 0, .8);
   --color-info-night: #eee;
 }
@@ -32,6 +32,7 @@ html, body {
 }
 
 body {
+  background-color: rgb(50, 60, 80);
   background-image: url('images/clear-sky-day.png');
   background-repeat: no-repeat;
   background-size: auto 150%;
@@ -48,6 +49,7 @@ body {
 
 header {
   padding: 1rem;
+  background-color: var(--color-primary);
 }
 h1, p {
   text-align: center;
@@ -80,8 +82,8 @@ form {
 }
 
 #submit {
-  background: none;
-  border: 2px solid white;
+  background: var(--color-primary);
+  border: none;
   border-radius: 4px;
   color: white;
   cursor: pointer;
@@ -96,7 +98,7 @@ form {
 
 #map {
   margin: 1rem auto;
-  height: 70rem;
+  height: 72rem;
   width: 90%;
   background: lightgray;
   border-radius: 6px;
@@ -135,6 +137,10 @@ form {
   display: inline-block;
 }
 
+.weather-info * {
+  margin: 1rem;
+}
+
 
 /* =====================
   POPUP BUBBLE
@@ -159,7 +165,7 @@ form {
   left: 0;
   transform: translate(-50%, -100%);
   /* Style the bubble. */
-  background-color: rgba(25, 50, 100, .9);
+  background-color: var(--color-primary);
   color: #eee;
   padding: 1rem;
   border-radius: 5px;
@@ -171,10 +177,6 @@ form {
 }
 .popup-bubble.show {
   animation: popIn .3s forwards;
-}
-.popup-bubble.night {
-  background-color: #ddd;
-  color: #000;
 }
 /* The parent of the bubble. A zero-height div at the top of the tip. */
 .popup-bubble-anchor {
@@ -207,4 +209,31 @@ form {
   position: absolute;
   /* The max width of the info window. */
   min-width: 600px;
+}
+
+
+@media only screen and (max-width: 600px) {
+  html {
+    font-size: 50%;
+  }
+  h1 {
+    font-size: 4rem;
+  }
+  p {
+    margin: .5rem;
+    font-size: 1.5rem;
+  }
+  .popup-container {
+    max-width: 100%;
+  }
+  .weather-header {
+    font-size: 3rem;
+  }
+
+  .weather-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 2rem;
+  }
 }
