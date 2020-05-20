@@ -50,7 +50,7 @@ function getWeather(place, coords, map) {
             <div class="weather-description">${weatherDescription}</div>
             <div class="weather-info">
               <div class="winds">
-                Wind Speed: ${Math.floor(data.wind.speed)} m/s
+                Wind Speed: ${Math.floor(data.wind.speed)} m/h
               </div>
               <div class="humidity">
                 Humidity: ${data.main.humidity}%
