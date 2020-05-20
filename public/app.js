@@ -25,7 +25,7 @@ function initMap() {
 function getWeather(place, coords, map) {
   var lat = coords.lat,
       lng = coords.lng;
-  axios("http://localhost:9000/getWeather?lat=".concat(lat, "&lng=").concat(lng)).then(function (result) {
+  axios("/.netlify/functions/getWeather?lat=".concat(lat, "&lng=").concat(lng)).then(function (result) {
     // console.log(result.data);
     var data = result.data;
     console.log(data);
