@@ -25,9 +25,10 @@ function initMap() {
 function getWeather(place, coords, map) {
   var lat = coords.lat,
       lng = coords.lng;
-  axios("/.netlify/functions/getWeather?lat=".concat(lat, "&lng=").concat(lng)).then(function (result) {
+  axios("http://localhost:9000/getWeather?lat=".concat(lat, "&lng=").concat(lng)).then(function (result) {
     // console.log(result.data);
     var data = result.data;
+    console.log(data);
     var icon = data.weather[0].icon;
     var isNight = icon.match(/n$/);
     var weatherDescription = data.weather[0].description;
