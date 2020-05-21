@@ -18,7 +18,7 @@
 
 :root {
   --color-primary: hsl(140, 50%, 60%);
-  --color-secondary: hsl(150, 50%, 40%);
+  --color-secondary: hsl(160, 60%, 40%);
   --color-info-day: rgba(0, 0, 0, .8);
   --color-info-night: #eee;
 }
@@ -49,9 +49,10 @@ body {
 ==================== */
 
 header {
-  padding: 1rem;
-  background: linear-gradient(var(--color-primary), var(--color-secondary));
+  padding: 2rem 1rem;
+  background: linear-gradient(to bottom right, var(--color-primary), var(--color-secondary));
 }
+
 h1, p {
   text-align: center;
 }
@@ -71,6 +72,7 @@ p {
 ====================== */ 
 
 form {
+  margin: 2rem 0;
   text-align: center;
 }
 
@@ -83,13 +85,13 @@ form {
 }
 
 .submit {
-  background: linear-gradient(var(--color-primary), var(--color-secondary));
+  background: linear-gradient(to bottom right, var(--color-primary), var(--color-secondary));
   border: none;
-  border-radius: 4px;
+  border-radius: 2rem;
   color: white;
   cursor: pointer;
-  height: 3rem;
-  width: 11rem;
+  height: 3.5rem;
+  width: 12rem;
 }
 
 .address:focus,
@@ -172,7 +174,7 @@ form {
   left: 0;
   transform: translate(-50%, -100%);
   /* Style the bubble. */
-  background: linear-gradient(var(--color-primary), var(--color-secondary));
+  background: linear-gradient(to bottom right, var(--color-primary), var(--color-secondary));
   color: #eee;
   padding: 1rem;
   border-radius: 5px;
