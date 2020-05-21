@@ -17,8 +17,8 @@
 ==================== */
 
 :root {
-  --color-primary: hsl(140, 50%, 60%);
-  --color-secondary: hsl(160, 60%, 40%);
+  --color-primary: hsl(140, 55%, 65%);
+  --color-secondary: hsl(160, 60%, 45%);
   --color-info-day: rgba(0, 0, 0, .8);
   --color-info-night: #eee;
 }
